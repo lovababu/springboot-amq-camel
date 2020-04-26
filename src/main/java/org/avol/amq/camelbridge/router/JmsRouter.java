@@ -29,7 +29,7 @@ public class JmsRouter extends RouteBuilder {
                     System.out.println(">>>>>>>>>>>>>>>>>>>> " + convertedMessage);
                     exchange.getMessage().setBody(convertedMessage);
                 })
-                .to("wmq:queue:COLLINE.SWIFT.D1")
+                .to("wmq:queue:<jboss_mq>")
                 .log(LoggingLevel.DEBUG, log, "Message is successfully sent to the output queue")
                 .end();
     }
