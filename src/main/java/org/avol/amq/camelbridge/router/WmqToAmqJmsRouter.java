@@ -9,14 +9,13 @@ import org.springframework.beans.factory.annotation.Value;
 /**
  * @author Lovababu P
  */
-public class JmsRouter extends RouteBuilder {
+public class WmqToAmqJmsRouter extends RouteBuilder {
+    private static final Logger logger = LoggerFactory.getLogger(AmqToWmqJmsRouter.class);
 
-    private static final Logger logger = LoggerFactory.getLogger(JmsRouter.class);
-
-    @Value("${input.queue}")
+    @Value("${jbossmq.response.queue.name}")
     private String inQueue;
 
-    @Value("${output.queue}")
+    @Value("${amq.out.queue}")
     private String outQueue;
 
     @Override
@@ -26,11 +25,11 @@ public class JmsRouter extends RouteBuilder {
                 .log(LoggingLevel.DEBUG, log, "New message received")
                 .process(exchange -> {
                     String convertedMessage = exchange.getMessage().getBody() + " is converted";
-                    System.out.println(">>>>>>>>>>>>>>>>>>>> " + convertedMessage);
                     exchange.getMessage().setBody(convertedMessage);
                 })
-                .to("wmq:queue:<jboss_mq>")
-                .log(LoggingLevel.DEBUG, log, "Message is successfully sent to the output queue")
+                .to(outQueue)
+                .log(LoggingLevel.DEBUG, log,
+                        "Acknowledge Message is successfully sent to the output queue")
                 .end();
     }
 }

@@ -2,12 +2,12 @@ package org.avol.amq.camelbridge.config;
 
 import com.ibm.mq.jms.MQQueue;
 import com.ibm.mq.jms.MQQueueConnectionFactory;
-import com.ibm.msg.client.jms.internal.JMSComponent;
 import org.apache.camel.component.jms.JmsConfiguration;
-import org.avol.amq.camelbridge.router.JmsRouter;
+import org.avol.amq.camelbridge.router.AmqToWmqJmsRouter;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.jms.JmsComponent;
+import org.avol.amq.camelbridge.router.WmqToAmqJmsRouter;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -92,8 +92,13 @@ public class JmsConfig {
         return new MQQueue(jbossQueueManager, jbossRequestQueueName);
     }
 
-    @Bean
-    public RouteBuilder routeBuilder() {
-        return new JmsRouter();
+    @Bean(value = "amq-to-wmq-bridge")
+    public RouteBuilder amqToWmqRouteBuilder() {
+        return new AmqToWmqJmsRouter();
+    }
+
+    @Bean(value = "wmq-to-amq-bridge")
+    public RouteBuilder wmqToAmqRouteBuilder() {
+        return new WmqToAmqJmsRouter();
     }
 }
