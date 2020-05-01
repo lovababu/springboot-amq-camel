@@ -12,9 +12,9 @@
 
     docker pull rmohr/activemq
    
-Then run:
+Then run interactive:
 
-    docker run -ti -p 61616:61616 -p 8161:8161 rmohr/activemq
+    docker run -it -p 61616:61616 -p 8161:8161 rmohr/activemq
     
 Or in the background:
 
