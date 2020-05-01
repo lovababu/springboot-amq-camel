@@ -14,11 +14,11 @@
    
 Then run:
 
-    docker run --rm -ti -p 61616:61616 -p 8161:8161 rmohr/activemq
+    docker run -ti -p 61616:61616 -p 8161:8161 rmohr/activemq
     
 Or in the background:
 
-    docker run -d --rm -p 61616:61616 -p 8161:8161 rmohr/activemq
+    docker run -d -p 61616:61616 -p 8161:8161 rmohr/activemq
     
 ### Build the application
 
