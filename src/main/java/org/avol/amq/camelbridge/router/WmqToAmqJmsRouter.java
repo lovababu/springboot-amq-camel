@@ -21,7 +21,7 @@ public class WmqToAmqJmsRouter extends RouteBuilder {
     @Override
     public void configure() throws Exception {
         from(inQueue)
-                .startupOrder(1)
+                .startupOrder(2)
                 .log(LoggingLevel.DEBUG, log, "New message received")
                 .process(exchange -> {
                     String convertedMessage = exchange.getMessage().getBody() + " is converted";

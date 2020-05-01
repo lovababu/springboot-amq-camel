@@ -1,12 +1,11 @@
 package org.avol.amq.camelbridge.config;
 
-import com.ibm.mq.jms.MQQueue;
 import com.ibm.mq.jms.MQQueueConnectionFactory;
-import org.apache.camel.component.jms.JmsConfiguration;
-import org.avol.amq.camelbridge.router.AmqToWmqJmsRouter;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.jms.JmsComponent;
+import org.apache.camel.component.jms.JmsConfiguration;
+import org.avol.amq.camelbridge.router.AmqToWmqJmsRouter;
 import org.avol.amq.camelbridge.router.WmqToAmqJmsRouter;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,6 +27,9 @@ public class JmsConfig {
 
     @Value("${jbossmq.broker-url}")
     private String jbossMQUrl;
+
+    @Value("${jbossmq.broker-port}")
+    private int jbossMQPort;
 
     @Value("${jbossmq.queue.manager}")
     private String jbossQueueManager;
@@ -79,17 +81,12 @@ public class JmsConfig {
     public MQQueueConnectionFactory mqQueueConnectionFactory() throws JMSException {
         MQQueueConnectionFactory mqQueueConnectionFactory = new MQQueueConnectionFactory();
         mqQueueConnectionFactory.setHostName(jbossMQUrl);
-        mqQueueConnectionFactory.setPort(1714);
+        mqQueueConnectionFactory.setPort(jbossMQPort);
         mqQueueConnectionFactory.setQueueManager(jbossQueueManager);
         mqQueueConnectionFactory.setChannel(jbossChannelName);
         mqQueueConnectionFactory.setTargetClientMatching(true);
         mqQueueConnectionFactory.setTransportType(1);
         return mqQueueConnectionFactory;
-    }
-
-    @Bean
-    public MQQueue mqQueue() throws JMSException {
-        return new MQQueue(jbossQueueManager, jbossRequestQueueName);
     }
 
     @Bean(value = "amq-to-wmq-bridge")
