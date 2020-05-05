@@ -19,6 +19,10 @@ public class AmqToWmqJmsRouter extends RouteBuilder {
     @Value("${jbossmq.request.queue.name}")
     private String outQueue;
 
+    @Value("${amq.messagetype.value}")
+    private String messageType;
+
+
     @Override
     public void configure() throws Exception {
         from(inQueue)
@@ -28,6 +32,7 @@ public class AmqToWmqJmsRouter extends RouteBuilder {
                     String convertedMessage = exchange.getMessage().getBody() + " is converted";
                     exchange.getMessage().setBody(convertedMessage);
                 })
+                .setHeader("MessageType", constant(messageType))
                 .to(outQueue)
                 .log(LoggingLevel.DEBUG, log, "Message is successfully sent to the output queue")
                 .end();

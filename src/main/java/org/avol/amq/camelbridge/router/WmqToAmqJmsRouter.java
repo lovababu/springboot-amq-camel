@@ -18,6 +18,9 @@ public class WmqToAmqJmsRouter extends RouteBuilder {
     @Value("${amq.out.queue}")
     private String outQueue;
 
+    @Value("${jbossmq.messagetype.value}")
+    private String messageType;
+
     @Override
     public void configure() throws Exception {
         from(inQueue)
@@ -27,6 +30,7 @@ public class WmqToAmqJmsRouter extends RouteBuilder {
                     String convertedMessage = exchange.getMessage().getBody() + " is converted";
                     exchange.getMessage().setBody(convertedMessage);
                 })
+                .setHeader("MessageType", constant(messageType))
                 .to(outQueue)
                 .log(LoggingLevel.DEBUG, log,
                         "Acknowledge Message is successfully sent to the output queue")
