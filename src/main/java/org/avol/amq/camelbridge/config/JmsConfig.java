@@ -43,6 +43,9 @@ public class JmsConfig {
     @Value("${jbossmq.response.queue.name}")
     private String jbossResponseQueueName;
 
+    @Value("${jbossmq.username}")
+    private String jbossUserName;
+
     @Bean(name = "amqConnectionFactory")
     public ConnectionFactory amqConnectionFactory() {
         return new ActiveMQConnectionFactory(brokerUrl);
@@ -67,6 +70,7 @@ public class JmsConfig {
                                                             MQQueueConnectionFactory amqConnectionFactory) {
         JmsConfiguration jmsConfiguration = new JmsConfiguration();
         jmsConfiguration.setConnectionFactory(amqConnectionFactory);
+        jmsConfiguration.setUsername(jbossUserName);
         jmsConfiguration.setConcurrentConsumers(5); //to configured externally.
         return jmsConfiguration;
     }

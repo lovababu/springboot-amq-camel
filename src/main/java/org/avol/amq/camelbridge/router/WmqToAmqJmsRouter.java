@@ -18,8 +18,11 @@ public class WmqToAmqJmsRouter extends RouteBuilder {
     @Value("${amq.out.queue}")
     private String outQueue;
 
-    @Value("${jbossmq.messagetype.value}")
-    private String messageType;
+    @Value("${jbossmq.mt558.messageType.value}")
+    private String mt558MessageType;
+
+    @Value("${jbossmq.mt569.messageType.value}")
+    private String mt569MessageType;
 
     @Override
     public void configure() throws Exception {
@@ -30,7 +33,11 @@ public class WmqToAmqJmsRouter extends RouteBuilder {
                     String convertedMessage = exchange.getMessage().getBody() + " is converted";
                     exchange.getMessage().setBody(convertedMessage);
                 })
-                .setHeader("MessageType", constant(messageType))
+                .choice()
+                .when(body().startsWith("{2:0569"))
+                    .setHeader("MessageType", constant(mt569MessageType))
+                .otherwise()
+                    .setHeader("MessageType", constant(mt558MessageType))
                 .to(outQueue)
                 .log(LoggingLevel.DEBUG, log,
                         "Acknowledge Message is successfully sent to the output queue")
