@@ -12,7 +12,7 @@ import org.springframework.test.context.TestPropertySource;
 @RunWith(CamelSpringBootRunner.class)
 @ContextConfiguration(classes = JmsConfig.class)
 @TestPropertySource(locations = "classpath:application-test.properties")
-public class AmqToWmqJmsRouterTest extends CamelTestSupport {
+public class JmsRouterTest extends CamelTestSupport {
 
     @Autowired
     private AmqToWmqJmsRouter amqToWmqJmsRouter;
